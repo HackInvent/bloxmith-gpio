@@ -1,0 +1,108 @@
+[
+  {
+    "key": "enabled",
+    "type": "boolean",
+    "group": "main",
+    "label": "Enable installed low-voltage hardware",
+    "help": "Off by default. Only buttons and indicator LEDs with correct current limiting; never mains, power relays or safety-critical devices."
+  },
+  {
+    "key": "chip",
+    "group": "main",
+    "label": "GPIO chip device",
+    "help": "Exact /dev/gpiochipN from the installed board. Offsets below are chip line offsets, not physical header pin numbers."
+  },
+  {
+    "key": "button_offset",
+    "type": "integer",
+    "min": -1,
+    "max": 65535,
+    "group": "main",
+    "label": "Button line offset",
+    "help": "-1 disables the button. Choose an unused input line and verify the board pinout before enabling."
+  },
+  {
+    "key": "led_offset",
+    "type": "integer",
+    "min": -1,
+    "max": 65535,
+    "group": "main",
+    "label": "LED line offset",
+    "help": "-1 disables the LED. Must differ from the button. Use a resistor and respect the board's voltage/current ratings."
+  },
+  {
+    "key": "button_active_low",
+    "type": "boolean",
+    "group": "button",
+    "label": "Button active low",
+    "help": "Checked means a low electrical level is a press. Startup and resume establish a baseline; they do not invent a press."
+  },
+  {
+    "key": "button_bias",
+    "type": "select",
+    "options": [
+      "pull_up",
+      "pull_down",
+      "disabled"
+    ],
+    "group": "button",
+    "label": "Button pull resistor",
+    "help": "Internal bias is best effort in Linux. Provide the required external bias; a floating input is not reliable."
+  },
+  {
+    "key": "debounce_ms",
+    "type": "integer",
+    "min": 10,
+    "max": 1000,
+    "group": "button",
+    "label": "Stable level before event (ms)",
+    "help": "Emit only after the sampled level remains stable. Held buttons do not repeat; very short pulses may be missed."
+  },
+  {
+    "key": "led_active_low",
+    "type": "boolean",
+    "group": "hardware",
+    "label": "LED active low",
+    "help": "Checked means logical on drives a low electrical level. Verify the circuit; this does not change the supply voltage."
+  },
+  {
+    "key": "rest_active",
+    "type": "boolean",
+    "group": "hardware",
+    "label": "LED on at rest / before release",
+    "help": "Applied at acquisition, after timed patterns and before release. After release or power loss the circuit, not this block, determines the level."
+  },
+  {
+    "key": "max_pattern_ms",
+    "type": "integer",
+    "min": 100,
+    "max": 60000,
+    "group": "limits",
+    "label": "Maximum LED command duration (ms)",
+    "help": "Every on command needs duration_ms. Blink count and complete duration are bounded. A new accepted command replaces the current pattern."
+  },
+  {
+    "key": "max_events_per_run",
+    "type": "integer",
+    "min": 1,
+    "max": 100000,
+    "group": "limits",
+    "label": "Maximum button events per Run",
+    "help": "Releases the lines at this limit. Pause/resume does not reset the total; start a new Run."
+  },
+  {
+    "key": "poll_interval_ms",
+    "type": "integer",
+    "min": 5,
+    "max": 100,
+    "group": "limits",
+    "label": "Button sampling interval (ms)",
+    "help": "Ordinary human buttons, not pulse counting or real-time control. Scheduling delays can miss short transitions."
+  },
+  {
+    "key": "library",
+    "group": "hardware",
+    "label": "libgpiod library (administrator)",
+    "help": "Normally libgpiod.so.3 (API 2.x). An absolute .so path loads native code: only use a trusted installed library."
+  }
+]
